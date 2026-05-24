@@ -425,7 +425,15 @@ function renderAnalyseView(trades) {
         new ApexCharts(document.querySelector("#chart-discipline-impact"), {
             series: [score],
             chart: { type: 'radialBar', height: 280, background: 'transparent', fontFamily: 'inherit' },
-            plotOptions: { radialBar: { hollow: { size: '70%' }, dataLabels: { name: { show: false }, value: { fontSize: '32px', fontWeight: 800, color: '#FFF', offsetY: 10 } } } },
+            plotOptions: { 
+                radialBar: { 
+                    hollow: { size: '60%' }, 
+                    dataLabels: { 
+                        name: { show: false }, 
+                        value: { fontSize: '32px', fontWeight: 800, color: '#FFF', offsetY: 10, show: true } 
+                    } 
+                } 
+            },
             colors: [score < 40 ? '#F43F5E' : '#3fb950'],
             theme: { mode: 'dark' }
         }).render();
@@ -571,14 +579,14 @@ function renderMiniCircle(sel, d) {
         chart: { type: 'radialBar', width: 140, height: 140, background: 'transparent', fontFamily: 'inherit' },
         plotOptions: { 
             radialBar: { 
-                hollow: { size: '60%' },
+                hollow: { size: '50%' },
                 dataLabels: { 
                     name: { show: false },
-                    value: { fontSize: '16px', fontWeight: 800, color: '#FFF', offsetY: 6 } 
+                    value: { fontSize: '16px', fontWeight: 800, color: '#FFF', offsetY: 6, show: true } 
                 } 
             } 
         },
-        colors: ['#0072B9'],
+        colors: [wr < 40 ? '#F43F5E' : '#3fb950'],
         theme: { mode: 'dark' }
     }).render();
 }

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="assets/favicon.png?v=2">
+    <link rel="shortcut icon" href="assets/favicon.png?v=2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion | Bast Trading Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css?v=1.2">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="auth-page">
+
+    <div class="auth-card">
+        <div class="auth-header">
+            <div style="margin-bottom: 20px;">
+                <i class="fa-solid fa-chart-line" style="font-size: 40px; color: var(--primary-color);"></i>
+            </div>
+            <h1>Bast Trading</h1>
+            <p id="auth-subtitle">Accéder à la formation et à votre journal de trading</p>
+        </div>
+
+        <div id="alert-msg" class="alert" style="border-radius: 12px; padding: 12px 16px; margin-bottom: 24px; font-size: 14px; font-weight: 600;"></div>
+
+        <!-- Login Form -->
+        <div id="section-login">
+            <form id="login-form">
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" id="login-email" class="form-input" placeholder="nom@exemple.com" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Mot de passe</label>
+                    <input type="password" id="login-password" class="form-input" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-primary" id="btn-login" style="width: 100%; margin-top: 10px;">
+                    Se connecter <i class="fa-solid fa-arrow-right-to-bracket" style="margin-left: 8px;"></i>
+                </button>
+                <div style="margin-top: 30px; text-align: center; border-top: 1px solid var(--border-color); padding-top: 24px;">
+                    <span style="font-size: 14px; color: var(--text-muted); font-weight: 500;">Pas encore de compte ?</span>
+                    <a href="https://bast-trading.com/index.html#program" class="btn btn-link" style="color: var(--primary-color); font-weight: 800; text-decoration: none; cursor: pointer; padding: 0; margin-left: 8px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">S'inscrire</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Signup Form removed for private access -->
+    </div>
+
+    <script type="module">
+        import { signIn, checkAuth, getProfile } from './js/auth.js';
+
+        // Rediriger si déjà connecté
+        checkAuth();
+
+        const alertMsg = document.getElementById('alert-msg');
+        const loginSection = document.getElementById('section-login');
+
+        function showAlert(text, type) {
+            let msg = text;
+            if (text.includes('Invalid login credentials')) {
+                msg = "Email ou mot de passe incorrect. Veuillez réessayer.";
+            } else if (text.includes('Email not confirmed')) {
+                msg = "Veuillez confirmer votre adresse email.";
+            } else if (text.includes('User not found')) {
+                msg = "Utilisateur non trouvé.";
+            }
+            alertMsg.innerText = msg;
+            alertMsg.className = `alert alert-${type}`;
+            alertMsg.style.display = 'block';
+        }
+
+        // Handle Login
+        document.getElementById('login-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const btn = document.getElementById('btn-login');
+
+            btn.disabled = true;
+            btn.innerText = "Connexion...";
+
+            const { data, error } = await signIn(email, password);
+
+            if (error) {
+                showAlert(error.message, "error");
+                btn.disabled = false;
+                btn.innerText = "Se connecter";
+            } else {
+                // Fetch role for redirection
+                const { data: profile } = await getProfile(data.user.id);
+                const role = profile?.role || 'student';
+                
+                if (role === 'admin' || role === 'coach') {
+                    window.location.href = 'admin.html';
+                } else {
+                    window.location.href = 'dashboard.html';
+                }
+            }
+        };
+    </script>
+</body>
+</html>

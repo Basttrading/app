@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="assets/favicon.png?v=2">
+    <link rel="shortcut icon" href="assets/favicon.png?v=2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyse | Bast Trading Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css?v=1.4">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <i class="fa-solid fa-chart-line"></i> Bast Trading
+            </div>
+            <nav class="nav-menu">
+                <a href="dashboard.html" class="nav-link">
+                    <i class="fa-solid fa-house"></i> Dashboard
+                </a>
+                <a href="mes-trades.html" class="nav-link">
+                    <i class="fa-solid fa-clock-rotate-left"></i> Mes Trades
+                </a>
+                <a href="analyse.html" class="nav-link active">
+                    <i class="fa-solid fa-chart-pie"></i> Analyse
+                </a>
+                
+                <div style="height: 40px;"></div>
+
+                <a href="formation.html" class="nav-link">
+                    <i class="fa-solid fa-graduation-cap"></i> Formation
+                </a>
+                
+                <div class="sidebar-progress" id="sidebar-progress-container" style="padding: 0 16px; margin-top: -5px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 10px; font-weight: 700; color: var(--text-muted); margin-bottom: 5px;">
+                        <span id="sidebar-progress-percent">0%</span>
+                        <span id="sidebar-progress-count">0/0</span>
+                    </div>
+                    <div style="height: 6px; background: #111418; border-radius: 3px; overflow: hidden;">
+                        <div id="sidebar-progress-bar" style="height: 100%; width: 0%; background: var(--primary-color); transition: width 0.3s ease;"></div>
+                    </div>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="profile.html" class="nav-link" style="margin-bottom: 10px;">
+                    <i class="fa-solid fa-user-gear"></i> Profil
+                </a>
+                <button id="btn-logout" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Déconnexion</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-wrapper">
+            <header style="margin-bottom: 50px; display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <h1 style="font-size: 32px; margin-bottom: 8px;">Analyse Statistique</h1>
+                    <p style="color: var(--text-muted); font-size: 16px; font-weight: 500;">Identifiez vos forces et optimisez votre stratégie.</p>
+                </div>
+                <div style="background: var(--surface-color); padding: 12px 20px; border-radius: 14px; border: 1px solid var(--border-color); font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 12px; box-shadow: var(--shadow-sm);">
+                    <div style="width: 10px; height: 10px; background: var(--success-color); border-radius: 50%; box-shadow: 0 0 10px var(--success-color);"></div>
+                    <span id="user-display-name">...</span>
+                </div>
+            </header>
+
+            <!-- BARRE DE FILTRES -->
+            <section class="card filter-bar-analysis" style="margin-bottom: 30px;">
+                <div class="filter-grid-analysis">
+                    <div class="filter-item">
+                        <label>Compte</label>
+                        <select id="filter-account" class="form-input mini">
+                            <option value="all">Tous les comptes</option>
+                            <option value="Demo">Backtesting</option>
+                            <option value="Funded">Propfirm</option>
+                            <option value="Demo">Paper (Démo)</option>
+                            <option value="Personal">Compte Propre</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label>Période</label>
+                        <select id="filter-period" class="form-input mini">
+                            <option value="all">Tout le temps</option>
+                            <option value="week">Cette semaine</option>
+                            <option value="month">Ce mois-ci</option>
+                            <option value="custom">Date personnalisée</option>
+                        </select>
+                    </div>
+                    <div id="custom-date-inputs" class="filter-item" style="display: none;">
+                        <label>Intervalle</label>
+                        <div style="display: flex; gap: 5px;">
+                            <input type="date" id="date-start" class="form-input mini">
+                            <input type="date" id="date-end" class="form-input mini">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div id="loading-state" style="text-align: center; padding: 100px;">
+                <i class="fa-solid fa-spinner fa-spin" style="font-size: 48px; color: var(--primary-color);"></i>
+                <p style="margin-top: 20px; color: var(--text-muted);">Calcul des analyses...</p>
+            </div>
+
+            <div id="analyse-content" style="display: none;">
+                <!-- 1. WINRATE PAR SESSION (TOP) -->
+                <section class="card analysis-card" style="margin-bottom: 25px;">
+                    <h2 class="card-title">Winrate par Session</h2>
+                    <div class="sessions-circles-wrapper">
+                        <div class="session-circle-item">
+                            <div id="chart-session-london"></div>
+                            <span class="session-label">LONDRES</span>
+                        </div>
+                        <div class="session-circle-item">
+                            <div id="chart-session-ny"></div>
+                            <span class="session-label">NEW YORK</span>
+                        </div>
+                        <div class="session-circle-item">
+                            <div id="chart-session-asia"></div>
+                            <span class="session-label">ASIE</span>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="analysis-grid">
+                    <!-- 2. Performance par Actif -->
+                    <section class="card analysis-card">
+                        <h2 class="card-title">Performance par Actif (RR Cumulé)</h2>
+                        <div id="chart-asset-performance" class="chart-container"></div>
+                    </section>
+
+                    <!-- 3. Discipline -->
+                    <section class="card analysis-card">
+                        <h2 class="card-title">Score de Discipline</h2>
+                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
+                            <div id="chart-discipline-impact" class="chart-container" style="min-height: 250px;"></div>
+                            <p id="discipline-comment" style="color: var(--text-muted); font-size: 13px; text-align: center; margin-top: -20px;"></p>
+                        </div>
+                    </section>
+
+                    <!-- 4. Winrate par Biais (4H & 1H) -->
+                    <section class="card analysis-card">
+                        <h2 class="card-title">Winrate par Biais (4H & 1H)</h2>
+                        <div id="chart-bias-performance" class="chart-container"></div>
+                    </section>
+
+                    <!-- 5. Winrate Fibonacci -->
+                    <section class="card analysis-card">
+                        <h2 class="card-title">Winrate par Niveau Fibonacci</h2>
+                        <div id="chart-fibonacci-performance" class="chart-container"></div>
+                    </section>
+
+                    <!-- 6. Analyse des Confluences (Large) -->
+                    <section class="card analysis-card" style="grid-column: span 2;">
+                        <h2 class="card-title">Winrate : Avec vs Sans Confluence</h2>
+                        <div id="chart-confluence-performance" class="chart-container"></div>
+                    </section>
+                </div>
+            </div>
+
+            <div id="empty-state" style="display: none; text-align: center; padding: 100px;">
+                <i class="fa-solid fa-chart-line" style="font-size: 64px; color: var(--border-color); margin-bottom: 20px;"></i>
+                <h2>Pas assez de données</h2>
+                <p style="color: var(--text-muted); max-width: 400px; margin: 15px auto;">
+                    Enregistrez plus de trades pour débloquer les analyses détaillées de votre trading.
+                </p>
+                <a href="new-trade.html" class="btn btn-primary btn-new-trade" style="margin-top: 20px;">Ajouter un trade</a>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="js/analyse.js?v=1.2"></script>
+</body>
+</html>

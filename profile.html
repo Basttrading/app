@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="assets/favicon.png?v=2">
+    <link rel="shortcut icon" href="assets/favicon.png?v=2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Profil | Bast Trading Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css?v=1.2">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <i class="fa-solid fa-chart-line"></i> Bast Trading
+            </div>
+            <nav class="nav-menu">
+                <a href="dashboard.html" class="nav-link">
+                    <i class="fa-solid fa-house"></i> Dashboard
+                </a>
+                <a href="mes-trades.html" class="nav-link">
+                    <i class="fa-solid fa-clock-rotate-left"></i> Mes Trades
+                </a>
+                <a href="analyse.html" class="nav-link">
+                    <i class="fa-solid fa-chart-pie"></i> Analyse
+                </a>
+                
+                <!-- Espace vide de profil -->
+                <div style="height: 40px;"></div>
+
+                <a href="formation.html" class="nav-link">
+                    <i class="fa-solid fa-graduation-cap"></i> Formation
+                </a>
+                
+                <!-- Mini Progress Bar -->
+                <div class="sidebar-progress" id="sidebar-progress-container" style="padding: 0 16px; margin-top: -5px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 10px; font-weight: 700; color: var(--text-muted); margin-bottom: 5px;">
+                        <span id="sidebar-progress-percent">0%</span>
+                        <span id="sidebar-progress-count">0/0</span>
+                    </div>
+                    <div style="height: 6px; background: #111418; border-radius: 3px; overflow: hidden;">
+                        <div id="sidebar-progress-bar" style="height: 100%; width: 0%; background: var(--primary-color); transition: width 0.3s ease;"></div>
+                    </div>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="profile.html" class="nav-link active" style="margin-bottom: 10px;">
+                    <i class="fa-solid fa-user-gear"></i> Profil
+                </a>
+                <button id="btn-logout" class="btn-logout">
+                    <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-wrapper">
+            <header style="margin-bottom: 50px;">
+                <h1 style="font-size: 32px; margin-bottom: 8px;">Paramètres du Profil</h1>
+                <p style="color: var(--text-muted); font-size: 16px; font-weight: 500;">Gérez vos informations personnelles et la sécurité de votre compte.</p>
+            </header>
+
+            <div id="alert-msg" class="alert"></div>
+
+            <div class="profile-layout-grid">
+                <!-- Section 1: Informations Personnelles -->
+                <section class="card">
+                    <h2 style="margin-bottom: 25px; font-size: 18px;">Informations Personnelles</h2>
+                    
+                    <div class="profile-info-list">
+                        <!-- Nom -->
+                        <div class="info-item">
+                            <div class="info-group">
+                                <div class="info-label">Nom</div>
+                                <span id="display-nom" class="info-value">à compléter</span>
+                            </div>
+                            <button class="btn-edit-inline" onclick="window.triggerEdit('nom', 'votre Nom')">
+                                <i class="fa-solid fa-pencil"></i>
+                            </button>
+                        </div>
+
+                        <!-- Prénom -->
+                        <div class="info-item">
+                            <div class="info-group">
+                                <div class="info-label">Prénom</div>
+                                <span id="display-prenom" class="info-value">à compléter</span>
+                            </div>
+                            <button class="btn-edit-inline" onclick="window.triggerEdit('prenom', 'votre Prénom')">
+                                <i class="fa-solid fa-pencil"></i>
+                            </button>
+                        </div>
+
+                        <!-- Email (Lecture seule) -->
+                        <div class="info-item readonly">
+                            <div class="info-group">
+                                <div class="info-label">Adresse Email</div>
+                                <span id="display-email" class="info-value">...</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 2: Sécurité -->
+                <section class="card">
+                    <h2 style="margin-bottom: 25px; font-size: 18px;">Sécurité</h2>
+                    <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">
+                        Mettez à jour votre mot de passe régulièrement pour sécuriser votre compte.
+                    </p>
+                    
+                    <button class="btn btn-outline" style="width: 100%; justify-content: center; gap: 10px;" onclick="window.updatePassword()">
+                        <i class="fa-solid fa-key"></i> Modifier le mot de passe
+                    </button>
+
+                    <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border-color);">
+                        <p style="font-size: 12px; color: var(--error-color); opacity: 0.8;">
+                            <i class="fa-solid fa-triangle-exclamation"></i> Attention : La déconnexion sera requise après le changement.
+                        </p>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="js/profile-v2.js?v=1.4"></script>
+</body>
+</html>

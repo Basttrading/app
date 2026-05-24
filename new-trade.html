@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="assets/favicon.png?v=2">
+    <link rel="shortcut icon" href="assets/favicon.png?v=2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouveau Trade | Bast Trading Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css?v=1.2">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .btn:disabled { background-color: #444 !important; cursor: not-allowed; opacity: 0.6; }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-brand"><i class="fa-solid fa-chart-line"></i> Bast Trading</div>
+            <nav class="nav-menu">
+                <a href="dashboard.html" class="nav-link"><i class="fa-solid fa-house"></i> Dashboard</a>
+                <a href="mes-trades.html" class="nav-link"><i class="fa-solid fa-clock-rotate-left"></i> Mes Trades</a>
+                <a href="analyse.html" class="nav-link"><i class="fa-solid fa-chart-pie"></i> Analyse</a>
+                
+                <!-- Espace vide de profil -->
+                <div style="height: 40px;"></div>
+
+                <a href="formation.html" class="nav-link"><i class="fa-solid fa-graduation-cap"></i> Formation</a>
+                
+                <!-- Mini Progress Bar -->
+                <div class="sidebar-progress" id="sidebar-progress-container" style="padding: 0 16px; margin-top: -5px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 10px; font-weight: 700; color: var(--text-muted); margin-bottom: 5px;">
+                        <span id="sidebar-progress-percent">0%</span>
+                        <span id="sidebar-progress-count">0/0</span>
+                    </div>
+                    <div style="height: 6px; background: #111418; border-radius: 3px; overflow: hidden;">
+                        <div id="sidebar-progress-bar" style="height: 100%; width: 0%; background: var(--primary-color); transition: width 0.3s ease;"></div>
+                    </div>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="profile.html" class="nav-link" style="margin-bottom: 10px;">
+                    <i class="fa-solid fa-user-gear"></i> Profil
+                </a>
+                <button id="btn-logout" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Déconnexion</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-wrapper">
+            <header style="margin-bottom: 50px;">
+                <h1 id="page-title" style="font-size: 32px; margin-bottom: 8px;">Enregistrer un Trade</h1>
+                <p id="page-subtitle" style="color: var(--text-muted); font-size: 16px; font-weight: 500;">Saisie analytique complète (Version Française).</p>
+            </header>
+
+            <div id="alert-msg" class="alert"></div>
+
+            <form id="trade-form-final" onsubmit="return false;">
+                
+                <!-- SECTION 1: INFOS GÉNÉRALES -->
+                <div class="card form-section">
+                    <div class="form-section-title">Informations Générales</div>
+                    <div class="form-grid-3">
+                        <div class="form-group">
+                            <label class="form-label">Date du trade</label>
+                            <input type="date" id="trade_date" class="form-input" required onclick="this.showPicker()">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Actif (Asset)</label>
+                            <select id="asset" class="form-input" required>
+                                <option value="sp500">SP500</option>
+                                <option value="nasdaq">Nasdaq</option>
+                                <option value="dow_jones">Dow Jones</option>
+                                <option value="gold">Gold</option>
+                                <option value="bitcoin">Bitcoin</option>
+                                <option value="ethereum">Ethereum</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Sens (Order Side)</label>
+                            <select id="order_side" class="form-input" required>
+                                <option value="achat">Achat</option>
+                                <option value="vente">Vente</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Session</label>
+                            <select id="session" class="form-input" required>
+                                <option value="London">Londres</option>
+                                <option value="NY">New York</option>
+                                <option value="Asia">Asie</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Type de Compte</label>
+                            <select id="account_type" class="form-input" required>
+                                <option value="Demo">Backtesting</option>
+                                <option value="Funded">Propfirm</option>
+                                <option value="Demo">Paper Trading</option>
+                                <option value="Personal">Compte Propre</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Lien TradingView</label>
+                            <input type="url" id="tradingview_link" class="form-input" placeholder="Lien du graphique">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 2: ANALYSE TECHNIQUE -->
+                <div class="card form-section">
+                    <div class="form-section-title">Analyse Technique & Biais</div>
+                    <div class="form-grid-3">
+                        <div class="form-group">
+                            <label class="form-label">Biais 4H</label>
+                            <select id="bias_4h" class="form-input" required>
+                                <option value="haussier">Haussier</option>
+                                <option value="baissier">Baissier</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Biais 1H</label>
+                            <select id="bias_1h" class="form-input" required>
+                                <option value="haussier">Haussier</option>
+                                <option value="baissier">Baissier</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Fibonacci Retest</label>
+                            <select id="fibonacci_retest" class="form-input" required>
+                                <option value="0.5">0.5</option>
+                                <option value="0.71">0.71</option>
+                                <option value="jusqu_a_la_bougie">Jusqu'à la bougie</option>
+                            </select>
+                        </div>
+                        <div class="form-group span-3">
+                            <label class="form-label">Confluences</label>
+                            <div class="form-grid-3" style="background: rgba(255,255,255,0.02); padding: 15px; border-radius: 8px;">
+                                <div class="checkbox-group"><input type="checkbox" id="internal_liquidity"> <span>Liquidité Inverse</span></div>
+                                <div class="checkbox-group"><input type="checkbox" id="tr_liquidity_x2"> <span>Double Liquidation</span></div>
+                                <div class="checkbox-group"><input type="checkbox" id="bos"> <span>Bos</span></div>
+                                <div class="checkbox-group"><input type="checkbox" id="trendline"> <span>Trendline</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 3: RÉSULTATS -->
+                <div class="card form-section">
+                    <div class="form-section-title">Résultats & Psychologie</div>
+                    <div class="form-grid-3">
+                        <div class="form-group">
+                            <label class="form-label">RR Réalisé</label>
+                            <input type="number" id="rr_realized" class="form-input" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Résultat</label>
+                            <select id="result" class="form-input" required>
+                                <option value="Win">Gagnant (TP)</option>
+                                <option value="Loss">Perdant (SL)</option>
+                                <option value="BE">Break Even (BE)</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label class="form-label">Plan Respecté ?</label><div class="checkbox-group"><input type="checkbox" id="plan_respected"> <span>Oui</span></div></div>
+                        <div class="form-group"><label class="form-label">Qualité (1-5)</label><input type="number" id="trade_quality" class="form-input" min="1" max="5" value="5"></div>
+                        <div class="form-group"><label class="form-label">Émotion</label><input type="text" id="emotion" class="form-input" placeholder="ex: Calme"></div>
+                    </div>
+                    <div class="form-group" style="margin-top: 20px;"><label class="form-label">Commentaire</label><textarea id="comment" class="form-input" rows="3"></textarea></div>
+                </div>
+
+                <div style="margin-bottom: 50px; display: flex; gap: 20px; justify-content: flex-end;">
+                    <a href="mes-trades.html" class="btn btn-outline">Annuler</a>
+                    <button type="button" class="btn btn-primary" id="btn-save-final" style="min-width: 200px;">
+                        ENREGISTRER LE TRADE
+                    </button>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="js/new-trade.js"></script>
+</body>
+</html>

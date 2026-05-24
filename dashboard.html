@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="assets/favicon.png?v=2">
+    <link rel="shortcut icon" href="assets/favicon.png?v=2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Bast Trading Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css?v=1.4">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <i class="fa-solid fa-chart-line"></i> Bast Trading
+            </div>
+            <nav class="nav-menu">
+                <a href="dashboard.html" class="nav-link active">
+                    <i class="fa-solid fa-house"></i> Dashboard
+                </a>
+                <a href="mes-trades.html" class="nav-link">
+                    <i class="fa-solid fa-clock-rotate-left"></i> Mes Trades
+                </a>
+                <a href="analyse.html" class="nav-link">
+                    <i class="fa-solid fa-chart-pie"></i> Analyse
+                </a>
+                
+                <div style="height: 40px;"></div>
+
+                <a href="formation.html" class="nav-link">
+                    <i class="fa-solid fa-graduation-cap"></i> Formation
+                </a>
+                
+                <div class="sidebar-progress" id="sidebar-progress-container" style="padding: 0 16px; margin-top: -5px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 10px; font-weight: 700; color: var(--text-muted); margin-bottom: 5px;">
+                        <span id="sidebar-progress-percent">0%</span>
+                        <span id="sidebar-progress-count">0/0</span>
+                    </div>
+                    <div style="height: 6px; background: #111418; border-radius: 3px; overflow: hidden;">
+                        <div id="sidebar-progress-bar" style="height: 100%; width: 0%; background: var(--primary-color); transition: width 0.3s ease;"></div>
+                    </div>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="profile.html" class="nav-link" style="margin-bottom: 10px;">
+                    <i class="fa-solid fa-user-gear"></i> Profil
+                </a>
+                <button id="btn-logout" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Déconnexion</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-wrapper">
+            <header style="margin-bottom: 50px; display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <h1 id="welcome-msg" style="font-size: 32px; margin-bottom: 8px;">Bonjour,</h1>
+                    <p style="color: var(--text-muted); font-size: 16px; font-weight: 500;">Voici l'état de vos performances actuelles.</p>
+                </div>
+                <div style="background: var(--surface-color); padding: 12px 20px; border-radius: 14px; border: 1px solid var(--border-color); font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 12px; box-shadow: var(--shadow-sm);">
+                    <div style="width: 10px; height: 10px; background: var(--success-color); border-radius: 50%; box-shadow: 0 0 10px var(--success-color);"></div>
+                    <span id="user-display-name">...</span>
+                </div>
+            </header>
+
+            <div class="stats-grid" id="stats-container">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Win Rate</span>
+                        <i class="fa-solid fa-chart-pie stat-icon-bg"></i>
+                    </div>
+                    <span class="stat-value" id="stat-winrate">0%</span>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">RR Moyen</span>
+                        <i class="fa-solid fa-arrow-up-right-dots stat-icon-bg" style="color: var(--success-color);"></i>
+                    </div>
+                    <span class="stat-value" id="stat-avg-win">0 R</span>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Meilleur Trade</span>
+                        <i class="fa-solid fa-trophy stat-icon-bg" style="color: var(--primary-color);"></i>
+                    </div>
+                    <span class="stat-value" id="stat-best-trade">0 R</span>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Total Trades</span>
+                        <i class="fa-solid fa-hashtag stat-icon-bg"></i>
+                    </div>
+                    <span class="stat-value" id="stat-total-trades">0</span>
+                </div>
+            </div>
+
+            <section class="card chart-section" style="margin-bottom: 30px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="font-size: 18px;">Courbe de Performance</h2>
+                    <span class="badge badge-primary" id="total-r-badge" style="padding: 6px 12px; font-size: 14px;">0.00 R</span>
+                </div>
+                <div id="equity-chart"></div>
+            </section>
+
+            <section class="card calendar-section" style="margin-bottom: 30px;">
+                <div class="calendar-header-wrapper">
+                    <div class="calendar-title-group">
+                        <h2 class="calendar-main-title">Calendrier de Trading</h2>
+                        <div class="calendar-toggles">
+                            <button class="toggle-btn active">RR</button>
+                        </div>
+                    </div>
+                    <div class="calendar-nav-group">
+                        <button id="prev-month" class="btn-nav"><i class="fa-solid fa-arrow-left"></i></button>
+                        <h2 id="current-month-display" class="calendar-month-year">...</h2>
+                        <button id="next-month" class="btn-nav"><i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+                <div class="calendar-grid-header">
+                    <span>LUN</span><span>MAR</span><span>MER</span><span>JEU</span><span>VEN</span><span>SAM</span><span>DIM</span>
+                </div>
+                <div id="calendar-days" class="calendar-grid"></div>
+            </section>
+
+            <section class="card recent-trades-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                    <h2 style="font-size: 18px;">Derniers Trades</h2>
+                    <a href="mes-trades.html" style="font-size: 14px; font-weight: 600;">Tout voir</a>
+                </div>
+                <div class="table-container">
+                    <table id="recent-trades-table-mini">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Actif</th>
+                                <th>Sens</th>
+                                <th>Session</th>
+                                <th>Résultat</th>
+                                <th style="text-align: right;">RR</th>
+                            </tr>
+                        </thead>
+                        <tbody id="trades-list"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <div id="empty-state" style="display: none; text-align: center; padding: 40px;">
+                <i class="fa-solid fa-folder-open" style="font-size: 48px; color: var(--border-color); margin-bottom: 16px;"></i>
+                <p style="color: var(--text-muted);">Aucun trade enregistré pour le moment.</p>
+                <a href="new-trade.html" class="btn btn-primary btn-new-trade" style="margin-top: 20px;">Ajouter mon premier trade</a>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="js/dashboard.js?v=2.2"></script>
+</body>
+</html>
